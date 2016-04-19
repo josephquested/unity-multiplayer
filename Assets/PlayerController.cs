@@ -1,11 +1,37 @@
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlayerController : MonoBehaviour {
-  void Update() {
-    var x = Input.GetAxis("Horizontal") * Time.deltaTime * 150.0f;
-    var z = Input.GetAxis("Vertical") * Time.deltaTime * 3.0f;
+public class PlayerController : NetworkBehaviour {
 
-    transform.Rotate(0, x, 0);
-    transform.Translate(0, 0, z);
+	public GameObject bulletPrefab;
+	public Transform bulletSpawn;
+
+  void Update () {
+	  if (!isLocalPlayer) {
+	    return;
+		}
+
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			Fire();
+		}
+
+      var x = Input.GetAxis("Horizontal") * Time.deltaTime * 150.0f;
+      var z = Input.GetAxis("Vertical") * Time.deltaTime * 3.0f;
+      transform.Rotate(0, x, 0);
+      transform.Translate(0, 0, z);
   }
+
+	void Fire () {
+	 var bullet = (GameObject)Instantiate(
+			 bulletPrefab,
+			 bulletSpawn.position,
+			 bulletSpawn.rotation);
+
+	 bullet.GetComponent<RigidBody>().velocity = bullet.transform.forward * 6;
+	 Destroy(bullet, 2.0f);
+	}
+
+	public override void OnStartLocalPlayer () {
+  	GetComponent().material.color = Color.blue;
+	}
 }
