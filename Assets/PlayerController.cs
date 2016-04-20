@@ -27,11 +27,11 @@ public class PlayerController : NetworkBehaviour {
 			 bulletSpawn.position,
 			 bulletSpawn.rotation);
 
-	 bullet.GetComponent<RigidBody>().velocity = bullet.transform.forward * 6;
+	 bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6;
 	 Destroy(bullet, 2.0f);
 	}
 
 	public override void OnStartLocalPlayer () {
-  	GetComponent().material.color = Color.blue;
+		GetComponent<MeshRenderer>().material.color = Color.blue;
 	}
 }
